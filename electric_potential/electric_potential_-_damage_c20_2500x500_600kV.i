@@ -153,7 +153,7 @@ tensileStrength = 10.0 # in MPA Vogler et al. 2017
 ###
 ### VOLTAGE
 ###
-voltage_high = 0.60e6
+voltage_high = 0.6e6
 ## anders et al. OMAE 2017 -
 #  The voltages used for the process are up to 600 kV or higher.
 #  The rise time of the impulses is less than 120 ns.
