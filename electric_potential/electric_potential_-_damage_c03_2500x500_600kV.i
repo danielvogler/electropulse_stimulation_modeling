@@ -153,7 +153,7 @@ tensileStrength = 10.0 # in MPA Vogler et al. 2017
 ###
 ### VOLTAGE
 ###
-voltage_high = 0.6e6
+voltage_high = 0.60e6
 ## anders et al. OMAE 2017 -
 #  The voltages used for the process are up to 600 kV or higher.
 #  The rise time of the impulses is less than 120 ns.
@@ -180,37 +180,37 @@ voltage_low = 0.0
 
 
 [Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 2500
-  ny = 500
-  nz = 0
-  xmin = 0.0
-  xmax = 0.1
-  ymax = 0.02
-  zmin = 0
-  zmax = 0
-  elem_type = QUAD4
-[]
-
-
-[MeshModifiers]
-  [./createNewSidesetTop]
-    type = AddSideSetsFromBoundingBox
+  [gen]
+    type=GeneratedMeshGenerator
+    dim = 2
+    nx = 2500
+    ny = 500
+    nz = 0
+    xmin = 0.0
+    xmax = 0.1
+    ymax = 0.02
+    zmin = 0
+    zmax = 0
+    elem_type = QUAD4
+  []
+  [createNewSidesetTop]
+    type  =SideSetsFromBoundingBoxGenerator
+    input = gen
     boundary_id_old = 'top'
     boundary_id_new = 10
     bottom_left = '0.0495 -0.09 0'
     top_right = '0.0505 0.11 0'
     block_id = 0
-  [../]
-  [./createNewSidesetbottom]
-    type = AddSideSetsFromBoundingBox
+  []
+  [createNewSidesetbottom]
+    type  = SideSetsFromBoundingBoxGenerator
+    input = createNewSidesetTop
     boundary_id_old = 'bottom'
     boundary_id_new = 11
     bottom_left = '0.0495 -0.09 0'
     top_right = '0.0505 0.11 0'
     block_id = 0
-  [../]
+  []
 []
 
 
@@ -237,9 +237,9 @@ voltage_low = 0.0
   [./phi]
     initial_condition = 0.0
   [../]
-  # [./T]
-  #   initial_condition = ${T_solid_initial}
-  # [../]
+  [./T]
+    initial_condition = ${T_solid_initial}
+  [../]
 []
 
 
@@ -249,10 +249,10 @@ voltage_low = 0.0
     variable = phi
     diffusion_coefficient = electrical_conductivity_material_mix
   [../]
-  # [./htcond]
-  #   type = HeatConduction
-  #   variable = T
-  # [../]
+  [./htcond]
+    type = HeatConduction
+    variable = T
+  [../]
   # [./time_deriv_T]
   #   type = SpecificHeatConductionTimeDerivative
   #   specific_heat_solid = specific_heat_solid
@@ -593,7 +593,7 @@ voltage_low = 0.0
   ###
   [./my_image]
     type = ImageFunction
-    file_base = ../../input_files/material_composition/voronoi_lacDuBonnetGranite_EberhardEtAl1999_sharp_
+    file_base = ../input_files/material_composition/voronoi_lacDuBonnetGranite_EberhardEtAl1999_sharp_
     file_suffix = png
     file_range = '00'
   [../]
@@ -632,13 +632,17 @@ voltage_low = 0.0
   [../]
   ### MECH - DIRICHLET
   [./disp_x]
-    type = PresetBC
+    # type = PresetBC
+    type = DirichletBC
+      preset=true
     boundary = 'left right'
     variable = disp_x
     value = 0
   [../]
   [./disp_y]
-    type = PresetBC
+    # type = PresetBC
+    type = DirichletBC
+    preset=true
     boundary = 'left right'
     variable = disp_y
     value = 0
@@ -1026,15 +1030,15 @@ voltage_low = 0.0
     eigenstrain_name = thermal_expansion
   [../]
   # ### phase field based thermal conductivity
-  # [./phasemap_k_th]
-  #   type = ParsedMaterial
-  #   f_name = thermal_conductivity
-  #   args = 'map'
-  #   function = 'if(map>${it_z_lo},${GR_thK_z},if(map>${it_f_lo},${GR_thK_f},if(map>${it_e_lo},
-  #   ${GR_thK_e},if(map>${it_d_lo},${GR_thK_d},if(map>${it_c_lo},${GR_thK_c},if(map>${it_b_lo},
-  #   ${GR_thK_b},if(map>${it_a_lo},${GR_thK_a},${GR_thK_z})))))))'
-  #   outputs = exodus
-  # [../]
+  [./phasemap_k_th]
+    type = ParsedMaterial
+    f_name = thermal_conductivity
+    args = 'map'
+    function = 'if(map>${it_z_lo},${GR_thK_z},if(map>${it_f_lo},${GR_thK_f},if(map>${it_e_lo},
+    ${GR_thK_e},if(map>${it_d_lo},${GR_thK_d},if(map>${it_c_lo},${GR_thK_c},if(map>${it_b_lo},
+    ${GR_thK_b},if(map>${it_a_lo},${GR_thK_a},${GR_thK_z})))))))'
+    outputs = exodus
+  [../]
 
   ###
   ### DAMAGE
@@ -1071,11 +1075,15 @@ voltage_low = 0.0
 
 [Executioner]
   type = Transient
-  solve_type = NEWTON
+  #
+  # solve_type = NEWTON
+  # petsc_options = ksp_monitor
+  # petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
+  # petsc_options_value = 'lu mumps'
 
-  petsc_options = ksp_monitor
-  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
-  petsc_options_value = 'lu mumps'
+  solve_type = 'PJFNK'
+  petsc_options_iname = '-pc_type -pc_hypre_type'
+  petsc_options_value = 'hypre boomeramg'
 
   nl_rel_tol = 1e-5
   nl_abs_tol = 1E-10
@@ -1095,5 +1103,5 @@ voltage_low = 0.0
   interval = ${plot_intervals}
   exodus = true
   perf_graph = true
-  file_base = ./electric_potential_-_damage_c03_2500x500_600kV
+  file_base = ./electric_potential_-_damage_c20_2500x500_600kV
 []
