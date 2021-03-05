@@ -1103,5 +1103,5 @@ voltage_low = 0.0
   interval = ${plot_intervals}
   exodus = true
   perf_graph = true
-  file_base = ./electric_potential_-_damage_c20_2500x500_600kV
+  file_base = ./electric_potential_-_damage_c03_2500x500_600kV
 []
