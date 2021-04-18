@@ -17,4 +17,4 @@ Electropulse stimulation system
 
 
 <img src="./images/electropulse_stimulation_results.png" width="400">
-Time series for 0.4, 1.2 and 2.0~$\mu s$ for: a) Electrical conductivity of the fluid $\lambda_f$; b) Electrical conductivity of the material mix $\lambda_m$; c) Temperature of the fluid $T_{f}$; d) Electric Field $|\phi_{,j}|$; and e) Electric current $J_i$.
+Time series for 0.4, 1.2 and 2.0 microseconds for: a) Electrical conductivity of the fluid; b) Electrical conductivity of the material mix; c) Temperature of the fluid; d) Electric Field; and e) Electric current.
