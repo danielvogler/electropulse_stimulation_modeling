@@ -10,7 +10,7 @@ Modeling of electropulse induced damage
 - Walsh, S.D.C., and D. Vogler, Simulating Electropulse Fracture of Granitic Rock, International Journal of Rock Mechanics and Mining Sciences, 128, pp. 104238, 2020. [https://doi.org/10.1016/j.ijrmms.2020.104238](https://doi.org/10.1016/j.ijrmms.2020.104238)
 - Vogler, D., S.D.C. Walsh, and M.O. Saar, A Numerical Investigation into Key Factors Controlling Hard Rock Excavation via Electropulse Stimulation, Journal of Rock Mechanics and Geotechnical Engineering, 12/4, pp. 793-801, 2020. [https://doi.org/10.1016/j.jrmge.2020.02.002](https://doi.org/10.1016/j.jrmge.2020.02.002)  
 
-
+### Figures
 <img src="./images/electropulse_stimulation_system.png" width="400">
 Electropulse stimulation system  
 
